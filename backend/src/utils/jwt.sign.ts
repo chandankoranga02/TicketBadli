@@ -8,7 +8,7 @@ if (!JWT_SECRET) {
 
 const signJwt = (payload: object) => {
     return jwt.sign(payload, JWT_SECRET, {
-        expiresIn: "15d",
+         expiresIn: "15d",
     });
 };
 
