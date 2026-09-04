@@ -12,15 +12,18 @@ datasource db {
 // ─────────────────────────────────────────────────────────────
 
 model User {
-  id                      String    @id @default(uuid())
-  userId                  String    @unique @map("user_id")
-  email                   String    @unique
-  role                    UserRole  @default(USER)
+  id                      String       @id @default(uuid())
+  userId                  String       @unique @map("user_id")
+  email                   String       @unique
+  role                    UserRole     @default(USER)
+  devices                 UserDevice[]
   phone                   String?
-  accountCompletionStatus Boolean   @default(false) @map("account_completion_status")
+  password                String
+  fullName                String
+  accountCompletionStatus Boolean      @default(false) @map("account_completion_status")
   photo                   String?
-  createdAt               DateTime  @default(now()) @map("created_at")
-  updatedAt               DateTime  @updatedAt @map("updated_at")
+  createdAt               DateTime     @default(now()) @map("created_at")
+  updatedAt               DateTime     @updatedAt @map("updated_at")
 
   @@map("users")
 }
@@ -31,19 +34,19 @@ enum UserRole {
 }
 
 model UserDevice {
-  id          String   @id @default(uuid())
-  userId      String
+  id     String @id @default(uuid())
+  userId String
 
-  deviceName  String?
-  ipAddress   String?
-  os          String?
-  browser     String?
+  deviceName String?
+  ipAddress  String?
+  os         String?
+  browser    String?
 
-  latitude    Float?
-  longitude   Float?
+  latitude  Float?
+  longitude Float?
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  user        User    @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 }
