@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 const LoginService = require("./services/Login.service");
 const SingupService = require("./services/signup.service");
+const googleAuthService = require("./services/Google.service")
 
 const Login = async (req: Request, res: Response) => {
   try {
@@ -94,6 +95,45 @@ const Logout = async (req: Request, res: Response) => {
   }
 };
 
-const Google = async (req: Request, res: Response) => {};
+const Google = async (req: Request, res: Response) => {
+    try {
+    const { accessToken , latitude, longitude } = req.body;
+
+    if (!accessToken) {
+      return res.status(400).json({
+        msg: "Google access token is required",
+      });
+    }
+
+    const userAgent = req.headers["user-agent"];
+    const ipAddress = req.ip;
+    
+    const {user , token} = await googleAuthService({
+      accessToken,
+      userAgent ,
+      ipAddress ,
+      latitude,
+      longitude
+    });
+
+      res.cookie("Token", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return res.status(user.code).json({
+      msg: user.msg,
+      token: user.token,
+      user: user.user,
+    });
+  } catch (error) {
+    console.error("Google OAuth error:", error);
+    return res.status(401).json({
+      msg: "Google authentication failed",
+    });
+  }
+};
 
 module.exports = { Login, Singup, Google, Logout };

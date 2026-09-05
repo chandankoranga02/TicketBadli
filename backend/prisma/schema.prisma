@@ -18,7 +18,8 @@ model User {
   role                    UserRole     @default(USER)
   devices                 UserDevice[]
   phone                   String?
-  password                String
+  password                String?
+  provider                String       @default("EMAIL")
   fullName                String
   accountCompletionStatus Boolean      @default(false) @map("account_completion_status")
   photo                   String?
