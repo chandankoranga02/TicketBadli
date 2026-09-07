@@ -51,3 +51,20 @@ model UserDevice {
 
   user User @relation(fields: [userId], references: [id])
 }
+
+model Otp {
+  id        String   @id @default(cuid())
+  email     String
+  otpHash   String
+  type      OtpType
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email, type])
+}
+
+enum OtpType {
+  EMAIL_VERIFICATION
+  PASSWORD_RESET
+}
+
