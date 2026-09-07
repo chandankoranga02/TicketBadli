@@ -17,10 +17,23 @@ const GenerateOtp = async (req: Request, res: Response) => {
 };
 
 const VerifyOtp = async (req: Request, res: Response) => {
-   const { email, otp } = req.body;
-    
-   const result = await VerifyOtpService({email , otp})
-    
+  try {
+    const { email, otp } = req.body;
+    const result = await VerifyOtpService({ email, otp });
+
+    return res.status(200).json({
+      success: true,
+      message: result.message,
+      verificationtoken : result.verificationToken,
+    });
+  } catch (error: any) {
+    console.error("Verify OTP Error:", error);
+
+    return res.status(400).json({
+      success: false,
+      message: error.message || "OTP verification failed",
+    });
+  }
 };
 
 const ForgetPassword = async (req: Request, res: Response) => {};
