@@ -25,7 +25,6 @@ const VerifyOtp = async (req: Request, res: Response) => {
     return res.status(200).json({
       success: true,
       message: result.message,
-      verificationtoken: result.verificationToken,
     });
   } catch (error: any) {
     console.error("Verify OTP Error:", error);
@@ -38,9 +37,26 @@ const VerifyOtp = async (req: Request, res: Response) => {
 };
 
 const ForgetPassword = async (req: Request, res: Response) => {
-  const { email, password, verificationTOken } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  const result = ForgetPasswordService({ email, password, verificationTOken });
+    if (!email || !password) {
+      return res.status(400).json({
+        message: "Email and password are required",
+      });
+    }
+
+    const result = await ForgetPasswordService({
+      email,
+      password,
+    });
+
+    return res.status(200).json(result);
+  } catch (error: any) {
+    return res.status(400).json({
+      message: error.message || "Something went wrong",
+    });
+  }
 };
 
 const ForgetPasswordOtpGeneration = async (req: Request, res: Response) => {

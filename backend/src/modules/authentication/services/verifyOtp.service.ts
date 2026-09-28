@@ -1,6 +1,7 @@
-const bcrypt = require("bcrypt");
-const prisma = require("../../../config/prisma");
+const bcrypt = require("bcrypt");;
 const crypto = require("crypto");
+const redis = require("../../../config/redis");
+
 
 const VerifyOtpService = async (email: string, otp: number) => {
   // 1. Check input
@@ -13,54 +14,29 @@ const VerifyOtpService = async (email: string, otp: number) => {
   }
 
   // 2. Find OTP record corresponding to email
-  const otpRecord = await prisma.otp.findFirst({
-    where: {
-      email,
-    },
-  });
+  const otphash = await redis.get(`otp:${email}`);
 
-  if (!otpRecord) {
-    throw new Error("OTP not found");
-  }
-
-  // 3. Check expiry BEFORE comparing OTP
-  if (new Date() > otpRecord.expiresAt) {
-    await prisma.otp.delete({
-      where: {
-        id: otpRecord.id,
-      },
-    });
-
-    throw new Error("OTP has expired");
+  if (!otphash) {
+    throw new Error("OTP not found or OTP expired");
   }
 
 
   const isOtpValid = await bcrypt.compare(
     otp.toString(),
-    otpRecord.otpHash
+    otphash
   );
 
-  if (!isOtpValid) {
+  if (!otphash) {
     throw new Error("Invalid OTP");
   }
 
 
-  const verificationToken = crypto.randomBytes(32).toString("hex");
-
   // 6. OTP cannot be reused
-  await prisma.otp.delete({
-    where: {
-      id: otpRecord.id,
-    },
-  });
-
-  // TODO:
-  // verificationToken ko DB/Redis mein store karna hoga
-  // with expiry before signup can securely use it.
+  await redis.del(`otp:${email}`);
 
   return {
     message: "OTP verified successfully",
-    verificationToken,
+  
   };
 };
 

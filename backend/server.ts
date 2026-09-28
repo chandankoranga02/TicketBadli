@@ -4,6 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const { prisma } = require("./lib/prisma");
 import type { Request, Response } from "express";
+const redis = require("./src/config/redis")
 
 // Routes imports
 const Authentication = require("./src/modules/authentication/auth.router");
@@ -26,6 +27,7 @@ app.use("/api/v1/auth", Authentication);
 async function startServer() {
   try {
     await prisma.$connect();
+    await redis.connect();
 
     console.log("✅ Database connected successfully");
 

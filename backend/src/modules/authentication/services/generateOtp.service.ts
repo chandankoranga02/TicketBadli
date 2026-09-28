@@ -2,7 +2,7 @@ const GenerateOtp = require("../../../utils/OtpGenerator");
 const bcrypt = require("bcrypt");
 const resend = require("../../../config/resend")
 const VerifyOtpTemplate =require("../../../Templates/VerifyOtp.template")
-const prisma =require("../../../config/prisma");
+const redis = require("../../../config/redis")
 
 const GenerateOtpService = async  (email : string)=>{
    if (!email){
@@ -11,21 +11,9 @@ const GenerateOtpService = async  (email : string)=>{
 
    const randomOTP = GenerateOtp();
    const otpHash = await bcrypt.hash(randomOTP.toString(), 10);
-   const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
+   const expiresAt = 300;
 
-   await prisma.otp.deleteMany({
-    where: {
-      email,
-    },
-  });
-
-  await prisma.otp.create({
-    data: {
-      email,
-      otpHash,
-      expiresAt,
-    },
-  });
+  await redis.set( `otp:${email}`, otpHash, { EX: expiresAt });
   
   const { error } = await resend.emails.send({
     from: "TicketBadli <no-reply@appnests.in>",

@@ -4,7 +4,6 @@ const prisma = require("../../../config/prisma");
 const ForgetPasswordService = async (
   email: string,
   password: string,
-  verificationToken: string,
 ) => {
 
      // Token and pending 
@@ -28,7 +27,7 @@ const ForgetPasswordService = async (
     },
   });
 
-// store verification toekn in redis  
+
 
   return {
     message: "Password updated successfully",
