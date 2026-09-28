@@ -1,69 +1,19 @@
-import Image from "next/image";
+const Arrow = () => <span aria-hidden="true">→</span>;
+const listings = [
+  { route: "Delhi → Mumbai", date: "Sat, 18 Oct", time: "07:35 AM", mode: "Flight", airline: "IndiGo", price: "₹4,280", hue: "sky" },
+  { route: "Bengaluru → Goa", date: "Sun, 19 Oct", time: "06:10 AM", mode: "Flight", airline: "Air India", price: "₹3,650", hue: "orange" },
+  { route: "Mumbai → Ahmedabad", date: "Mon, 20 Oct", time: "09:15 PM", mode: "Train", airline: "Vande Bharat", price: "₹1,950", hue: "violet" },
+];
 
 export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+  return <main>
+    <nav className="nav shell"><a className="brand" href="#top"><span className="brand-mark">⇄</span>TicketBadli</a><div className="nav-links"><a href="#tickets">Browse Tickets</a><a href="#how-it-works">How It Works</a></div><div className="nav-actions"><a className="login" href="https://dashboard.appnests.in/login">Log in</a><a className="button small" href="https://dashboard.appnests.in/login">Sign up <Arrow /></a></div></nav>
+    <section className="hero" id="top"><div className="hero-glow glow-one" /><div className="hero-glow glow-two" /><div className="shell hero-content"><p className="eyebrow"><span className="pulse" /> A smarter way to travel</p><h1>Plans change.<br /><em>Tickets don&apos;t have to.</em></h1><p className="hero-copy">Buy and sell verified flight, train and bus tickets — securely, transparently, and without the last-minute stress.</p><div className="hero-actions"><a className="button" href="#tickets">Browse tickets <Arrow /></a><a className="text-link" href="#how-it-works">See how it works <span>↗</span></a></div><div className="hero-proof"><span>✦</span> Every ticket is verified before it&apos;s listed</div></div><div className="ticket-orbit ticket-a"><span>DEL</span><i>✈</i><span>BOM</span><small>18 Oct · 07:35</small></div><div className="ticket-orbit ticket-b"><b>Verified</b><strong>₹ 3,650</strong><small>Secure transfer</small></div></section>
+    <section className="search-wrap shell" aria-label="Search tickets"><div className="search-card"><div className="search-top"><span className="search-title">Find your ticket</span><div className="trip-toggle"><button className="active">One way</button><button>Round trip</button></div></div><div className="filter-grid"><label><span>FROM</span><strong>Delhi</strong><small>DEL · Indira Gandhi Intl.</small></label><button className="swap" aria-label="Swap origin and destination">⇄</button><label><span>TO</span><strong>Mumbai</strong><small>BOM · Chhatrapati Shivaji</small></label><label className="date"><span>DATE</span><strong>18 Oct 2026</strong><small>Sunday</small></label><label className="type"><span>TYPE</span><strong>All tickets</strong><small>Flight, train, bus</small></label><a href="#tickets" className="search-button" aria-label="Search tickets">⌕</a></div></div></section>
+    <section className="section shell" id="how-it-works"><div className="section-heading"><p className="eyebrow dark">Simple, secure, sorted</p><h2>How TicketBadli works</h2><p>We make passing on a ticket as easy as booking one.</p></div><div className="steps"><article><div className="step-num">01</div><div className="step-icon">⌁</div><h3>List your ticket</h3><p>Add your unused ticket in under two minutes. Set a fair price and let buyers find you.</p></article><article><div className="step-num">02</div><div className="step-icon">✓</div><h3>We verify it</h3><p>Our team checks every detail, so everyone knows exactly what they&apos;re getting.</p></article><article><div className="step-num">03</div><div className="step-icon">↗</div><h3>Transfer with ease</h3><p>Pay safely and transfer seamlessly. We&apos;re with you at every step.</p></article></div></section>
+    <section className="why-section"><div className="shell why-grid"><div><p className="eyebrow">Built for better travel</p><h2>Travel plans, made more <em>flexible.</em></h2><p className="why-copy">Whether you&apos;re saving a trip or passing one on, TicketBadli keeps the whole journey simple and safe.</p><a href="https://dashboard.appnests.in/login" className="button light">Get started <Arrow /></a></div><div className="benefits"><div><span>✓</span><p><b>Verified tickets</b><small>Every listing is checked by our team.</small></p></div><div><span>₹</span><p><b>Secure payments</b><small>Your money stays protected, always.</small></p></div><div><span>↗</span><p><b>Easy transfer</b><small>A guided handover from click to trip.</small></p></div></div></div></section>
+    <section className="section shell listings-section" id="tickets"><div className="section-row"><div><p className="eyebrow dark">Ready when you are</p><h2>Trending tickets</h2></div><a className="text-link dark-link" href="https://dashboard.appnests.in/login">View all tickets <Arrow /></a></div><div className="listing-grid">{listings.map((ticket) => <article className="listing" key={ticket.route}><div className={`listing-art ${ticket.hue}`}><span>{ticket.mode}</span><b>{ticket.airline}</b></div><div className="listing-body"><div className="listing-meta"><span>Verified</span><span>{ticket.date}</span></div><h3>{ticket.route}</h3><p>{ticket.time} · {ticket.airline}</p><div className="listing-foot"><strong>{ticket.price}</strong><a href="https://dashboard.appnests.in/login">View <Arrow /></a></div></div></article>)}</div></section>
+    <section className="safety shell"><div className="safety-icon">♢</div><div><p className="eyebrow dark">Your journey is protected</p><h2>Safety isn&apos;t an add-on.<br />It&apos;s the foundation.</h2></div><p>From ticket verification to secure payment holds, we&apos;ve designed every step to make ticket exchange feel dependable.</p><a className="round-link" href="#how-it-works">↗</a></section>
+    <section className="cta"><div className="shell"><p className="eyebrow">Don&apos;t let a good trip go to waste</p><h2>Your next journey<br />might already be waiting.</h2><a className="button light" href="https://dashboard.appnests.in/login">Find your ticket <Arrow /></a></div></section><footer className="footer shell"><a className="brand" href="#top"><span className="brand-mark">⇄</span>TicketBadli</a><p>Making travel a little more flexible.</p><div><a href="#how-it-works">How it works</a><a href="https://dashboard.appnests.in/login">Log in</a></div><small>© 2026 TicketBadli. Made for travellers.</small></footer>
+  </main>;
 }
