@@ -52,4 +52,157 @@ model UserDevice {
   user User @relation(fields: [userId], references: [id])
 }
 
+enum ListingStatus {
+  AVAILABLE
+  RESERVED
+  SOLD
+  CANCELLED
+  EXPIRED
+}
 
+
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  FAILED
+  EXPIRED
+}
+
+
+model Listing {
+  id                String   @id @default(uuid())
+
+  sellerId          String
+
+  pnrNumber         String
+  fromStation       String
+  toStation         String
+  boardingStation   String
+  reservationUpto   String? 
+
+  journeyDate       DateTime
+  journeyTime       DateTime?
+  arrivalDate       DateTime?
+
+  trainNumber       String
+  trainName         String
+  journeyClass      String
+
+  passengerCount    Int
+
+  price             Decimal  @db.Decimal(10, 2)
+
+  status            ListingStatus     @default(AVAILABLE)
+
+  verificationStatus VerificationStatus @default(PENDING)
+  verifiedAt        DateTime?
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([fromStation, toStation, journeyDate, status])
+  @@index([sellerId])
+  @@index([pnrNumber])
+}
+
+
+enum PaymentStatus {
+  CREATED
+  PENDING
+  SUCCESS
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+}
+
+
+enum PayoutStatus {
+  PENDING
+  PROCESSING
+  SUCCESS
+  FAILED
+  ON_HOLD
+}
+
+
+model Payment {
+  id                String        @id @default(uuid())
+
+  bookingId         String
+  buyerId           String
+
+  amount            Decimal       @db.Decimal(10, 2)
+  currency          String        @default("INR")
+
+  status            PaymentStatus @default(CREATED)
+
+  razorpayOrderId   String?       @unique
+  razorpayPaymentId String?       @unique
+
+  createdAt         DateTime      @default(now())
+  paidAt            DateTime?
+
+  @@index([bookingId])
+  @@index([buyerId])
+  @@index([status])
+}
+
+
+model Payout {
+  id                 String       @id @default(uuid())
+
+  bookingId          String
+  sellerId           String
+
+  amount             Decimal      @db.Decimal(10, 2)
+  currency           String       @default("INR")
+
+  status             PayoutStatus @default(PENDING)
+
+  razorpayTransferId String?      @unique
+
+  scheduledAt        DateTime?
+  processedAt        DateTime?
+
+  failureReason      String?
+
+  createdAt          DateTime     @default(now())
+
+  @@index([bookingId])
+  @@index([sellerId])
+  @@index([status])
+}
+
+enum BookingStatus {
+  PENDING
+  PAYMENT_PENDING
+  CONFIRMED
+  CANCELLED
+  FAILED
+  REFUNDED
+}
+
+
+model Booking {
+  id            String        @id @default(uuid())
+
+  orderId       String        @unique
+
+  buyerId       String
+  sellerId      String
+  listingId     String
+
+  amount        Decimal       @db.Decimal(10, 2)
+
+  status        BookingStatus @default(PENDING)
+
+  expiresAt     DateTime?
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([buyerId])
+  @@index([sellerId])
+  @@index([listingId])
+  @@index([status])
+}

@@ -8,6 +8,7 @@ const redis = require("./src/config/redis")
 
 // Routes imports
 const Authentication = require("./src/modules/authentication/auth.router");
+const listening = require("./src/modules/listening/router")
 
 const app = express();
 const PORT = Number(process.env.PORT) || 5000;
@@ -23,6 +24,11 @@ app.get("/server", (req: Request, res: Response) => {
 
 // Routes
 app.use("/api/v1/auth", Authentication);
+app.use("/api/v1/listen" , listening);
+
+
+
+
 
 async function startServer() {
   try {
